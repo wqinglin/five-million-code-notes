@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1 class="a1">文件上传</h1>
+    <h2>单文件上传</h2>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="text" name="name" />
+      <input type="file" name="file" />
+      <input type="submit" value="提交" />
+    </form>
+
+    <h2>多文件上传</h2>
+    <form action="/uploadfiles" method="post" enctype="multipart/form-data">
+      <input type="text" name="name" />
+      <input type="file" name="file" id="file" multiple />
+      <input type="submit" value="提交" />
+    </form>
+
+    <h2>单文件上传(原生ajax请求) 已注释</h2>
+    <form id="myform">
+      <input type="text" name="name" id="inp" value="" />
+      <input type="file" name="file1" id="file1" />
+      <button id="submitBtn">提交</button>
+    </form>
+
+    <script>
+      let submitBtn = document.getElementById('submitBtn');
+      let form = document.getElementById('myform');
+      let formData = new FormData(form);
+
+      function conDeal() {
+        formData.delete('name');
+        let inp = document.getElementById('inp');
+        formData.append('name', inp.value);
+
+        formData.delete('file1');
+        let file1 = document.getElementById('file1');
+        formData.append('file1', file1.files[0]);
+      }
+      function ajaxReq() {
+        var ajax = new XMLHttpRequest();
+        ajax.open('post', '/upload', true);
+        ajax.send(formData);
+        ajax.onload = function () {
+          console.log(ajax.response);
+        };
+      }
+      submitBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        conDeal();
+        ajaxReq();
+      });
+    </script>
+  </body>
+</html>
